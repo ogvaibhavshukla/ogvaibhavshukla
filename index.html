@@ -471,7 +471,7 @@
                             display: none
                         }
                     </style>
-                    <div id="gallery-scroll" data-radix-scroll-area-viewport="" class="w-full h-full "
+                    <div id="gallery-scroll" class="scroll-container" data-radix-scroll-area-viewport="" class="w-full h-full "
                         style="overflow-x:auto;overflow-y:hidden">
                         <div style="min-width:100%;display:table">
                             <div class="flex w-full h-full gap-x-2">
@@ -793,6 +793,38 @@
             gallery.addEventListener('scroll', updateThumb);
             window.addEventListener('resize', updateThumb);
             updateThumb(); // Initial position
+        });
+    </script>
+    <script>
+        const slider = document.getElementById('gallery-scroll');
+
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        slider.addEventListener('mousedown', (e) => {
+            isDown = true;
+            slider.classList.add('active');
+            startX = e.pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+        });
+
+        slider.addEventListener('mouseleave', () => {
+            isDown = false;
+            slider.classList.remove('active');
+        });
+
+        slider.addEventListener('mouseup', () => {
+            isDown = false;
+            slider.classList.remove('active');
+        });
+
+        slider.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - slider.offsetLeft;
+            const walk = (x - startX) * 1.5; // scroll-fast multiplier
+            slider.scrollLeft = scrollLeft - walk;
         });
     </script>
 </body>
