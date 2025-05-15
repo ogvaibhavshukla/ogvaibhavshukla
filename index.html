@@ -471,7 +471,7 @@
                             display: none
                         }
                     </style>
-                    <div id="gallery-scroll" class="scroll-container" data-radix-scroll-area-viewport="" class="w-full h-full "
+                    <div id="gallery-scroll" data-radix-scroll-area-viewport="" class="w-full h-full "
                         style="overflow-x:auto;overflow-y:hidden">
                         <div style="min-width:100%;display:table">
                             <div class="flex w-full h-full gap-x-2">
@@ -796,59 +796,15 @@
         });
     </script>
     <script>
-        const slider = document.getElementById('gallery-scroll');
-        let isDown = false;
-        let startX;
-        let scrollLeft;
-        let velocity = 0;
-        let prevScrollLeft = 0;
-        let momentumInterval;
+        const scrollContainer = document.getElementById('gallery-scroll');
 
-        slider.addEventListener('mousedown', (e) => {
-            isDown = true;
-            slider.classList.add('dragging');
-            startX = e.pageX - slider.offsetLeft;
-            scrollLeft = slider.scrollLeft;
-            prevScrollLeft = slider.scrollLeft;
-            cancelMomentumTracking();
-        });
-
-        slider.addEventListener('mouseleave', () => {
-            isDown = false;
-            slider.classList.remove('dragging');
-        });
-
-        slider.addEventListener('mouseup', () => {
-            isDown = false;
-            slider.classList.remove('dragging');
-            beginMomentumTracking();
-        });
-
-        slider.addEventListener('mousemove', (e) => {
-            if (!isDown) return;
-            e.preventDefault();
-            const x = e.pageX - slider.offsetLeft;
-            const walk = x - startX;
-            slider.scrollLeft = scrollLeft - walk;
-            velocity = slider.scrollLeft - prevScrollLeft;
-            prevScrollLeft = slider.scrollLeft;
-        });
-
-        function beginMomentumTracking() {
-            cancelMomentumTracking();
-            momentumInterval = setInterval(() => {
-                slider.scrollLeft += velocity;
-                velocity *= 0.95; // friction
-                if (Math.abs(velocity) < 0.5) {
-                    clearInterval(momentumInterval);
-                }
-            }, 16); // ~60fps
-        }
-
-        function cancelMomentumTracking() {
-            clearInterval(momentumInterval);
-        }
-    </script>
+        scrollContainer.addEventListener('wheel', function (e) {
+            if (e.deltaY !== 0) {
+                e.preventDefault();
+                scrollContainer.scrollLeft += e.deltaY;
+            }
+        }, { passive: false });
+    </script>    
 </body>
 
 </html>
