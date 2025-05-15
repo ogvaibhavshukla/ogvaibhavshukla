@@ -284,19 +284,6 @@
         border-radius: 0
     }
 
-    #gallery-scroll {
-        cursor: grab;
-        overflow-x: auto;
-        overflow-y: hidden;
-        scroll-behavior: smooth;
-        user-select: none;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    #gallery-scroll.dragging {
-        cursor: grabbing;
-   }
-
     ::file-selector-button {
         font: inherit;
         font-feature-settings: inherit;
