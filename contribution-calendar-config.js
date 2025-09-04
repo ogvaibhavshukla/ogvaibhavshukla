@@ -9,7 +9,7 @@ window.ContributionCalendarConfig = {
     // Get one from: https://github.com/settings/tokens
     // Only needs "public_repo" permission for public repos
     // Token is now set via environment variable for security
-    GITHUB_TOKEN: process.env.GITHUB_TOKEN || '', // Set via Netlify environment variables
+    GITHUB_TOKEN: window.GITHUB_TOKEN || '', // Will be set via Netlify environment variables
     
     // 🎨 Default theme ('light' or 'dark')
     DEFAULT_THEME: 'dark',
