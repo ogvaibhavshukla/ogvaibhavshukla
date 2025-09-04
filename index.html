@@ -22,8 +22,13 @@
     <meta name="next-size-adjust" />
 
     <link rel="stylesheet" href="contribution-calendar.css">
+    <script>
+        // Inject environment variables for client-side use
+        window.GITHUB_TOKEN = '%%GITHUB_TOKEN%%';
+    </script>
     <script src="contribution-calendar-config.js"></script>
     <script src="contribution-calendar.js"></script>
+    <script src="script.js"></script>
 </head>
 
 <body class="__className_05a5d4">
@@ -795,34 +800,7 @@
             });
         });
     </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const gallery = document.getElementById('gallery-scroll');
-            const thumb = document.getElementById('gallery-thumb');
-
-            function updateThumb() {
-                const maxScroll = gallery.scrollWidth - gallery.clientWidth;
-                const scrollPercent = gallery.scrollLeft / maxScroll;
-                const maxThumbMove = gallery.clientWidth - thumb.offsetWidth;
-                thumb.style.transform = `translate3d(${scrollPercent * maxThumbMove}px, 0, 0)`;
-            }
-
-            gallery.addEventListener('scroll', updateThumb);
-            window.addEventListener('resize', updateThumb);
-            updateThumb(); // Initial position
-        });
-    </script>
-
-    <script>
-        const scrollContainer = document.getElementById('gallery-scroll');
-
-        scrollContainer.addEventListener('wheel', function (e) {
-            if (e.deltaY !== 0) {
-                e.preventDefault();
-                scrollContainer.scrollLeft += e.deltaY;
-            }
-        }, { passive: false });
-    </script>
+    <!-- Gallery scrolling functionality moved to script.js -->
 
 
 </body>
