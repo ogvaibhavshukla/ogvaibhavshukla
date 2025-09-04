@@ -111,10 +111,6 @@
   color: var(--cc-blue-dark);
 }
 
-
-
-
-
 /* Calendar container */
 .contribution-calendar-container .cc-calendar-container {
   background-color: var(--cc-container-light);
