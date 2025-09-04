@@ -11,8 +11,10 @@
 
 class ContributionCalendar {
     constructor(options = {}) {
+        console.log('🏗️ ContributionCalendar constructor called');
         // Default configuration
         const config = window.ContributionCalendarConfig || {};
+        console.log('📋 Config in constructor:', config);
         
         this.options = {
             container: '#contribution-calendar',
@@ -97,7 +99,10 @@ class ContributionCalendar {
     }
 
     createContainer() {
+        console.log('🏗️ createContainer called');
+        console.log('🔍 Looking for container:', this.options.container);
         const targetElement = document.querySelector(this.options.container);
+        console.log('📦 Target element found:', targetElement);
         if (!targetElement) {
             console.error(`Container element "${this.options.container}" not found`);
             return;
@@ -130,7 +135,13 @@ class ContributionCalendar {
             </div>
         `;
 
+        console.log('📤 Appending container to target element');
         targetElement.appendChild(this.container);
+        console.log('✅ Container appended successfully');
+        console.log('📏 Container dimensions:', {
+            width: this.container.offsetWidth,
+            height: this.container.offsetHeight
+        });
     }
 
     setupDOM() {
@@ -224,6 +235,9 @@ class ContributionCalendar {
     }
 
     renderGrid() {
+        console.log('🎨 renderGrid called');
+        console.log('📦 Container:', this.container);
+        console.log('📊 Grid data:', this.grid);
         this.updateGridDisplay();
     }
 
@@ -805,8 +819,19 @@ class ContributionCalendar {
 
 // Auto-initialize if container exists and config is loaded
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('🚀 DOM Content Loaded - Initializing calendar...');
     const defaultContainer = document.querySelector('#contribution-calendar');
+    console.log('📦 Container found:', defaultContainer);
+    console.log('⚙️ Config loaded:', window.ContributionCalendarConfig);
+    
     if (defaultContainer && window.ContributionCalendarConfig) {
+        console.log('✅ Creating calendar instance...');
         window.contributionCalendar = new ContributionCalendar();
+        console.log('🎉 Calendar created:', window.contributionCalendar);
+    } else {
+        console.error('❌ Missing container or config:', {
+            container: !!defaultContainer,
+            config: !!window.ContributionCalendarConfig
+        });
     }
 });
