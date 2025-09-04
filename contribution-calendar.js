@@ -11,10 +11,10 @@
 
 class ContributionCalendar {
     constructor(options = {}) {
-        console.log('🏗️ ContributionCalendar constructor called');
+        // console.log('🏗️ ContributionCalendar constructor called');
         // Default configuration
         const config = window.ContributionCalendarConfig || {};
-        console.log('📋 Config in constructor:', config);
+        // console.log('📋 Config in constructor:', config);
         
         this.options = {
             container: '#contribution-calendar',
@@ -92,17 +92,13 @@ class ContributionCalendar {
         this.setupEventListeners();
         this.renderGrid();
         this.fetchGithubContributions();
-        
-        // Initialize with random grid
-        this.grid = this.createRandomGrid();
-        this.updateGridDisplay();
     }
 
     createContainer() {
-        console.log('🏗️ createContainer called');
-        console.log('🔍 Looking for container:', this.options.container);
+        // console.log('🏗️ createContainer called');
+        // console.log('🔍 Looking for container:', this.options.container);
         const targetElement = document.querySelector(this.options.container);
-        console.log('📦 Target element found:', targetElement);
+        // console.log('📦 Target element found:', targetElement);
         if (!targetElement) {
             console.error(`Container element "${this.options.container}" not found`);
             return;
@@ -135,13 +131,13 @@ class ContributionCalendar {
             </div>
         `;
 
-        console.log('📤 Appending container to target element');
+        // console.log('📤 Appending container to target element');
         targetElement.appendChild(this.container);
-        console.log('✅ Container appended successfully');
-        console.log('📏 Container dimensions:', {
-            width: this.container.offsetWidth,
-            height: this.container.offsetHeight
-        });
+        // console.log('✅ Container appended successfully');
+        // console.log('📏 Container dimensions:', {
+            // width: this.container.offsetWidth,
+            // height: this.container.offsetHeight
+        // });
     }
 
     setupDOM() {
@@ -235,9 +231,9 @@ class ContributionCalendar {
     }
 
     renderGrid() {
-        console.log('🎨 renderGrid called');
-        console.log('📦 Container:', this.container);
-        console.log('📊 Grid data:', this.grid);
+        // console.log('🎨 renderGrid called');
+        // console.log('📦 Container:', this.container);
+        // console.log('📊 Grid data:', this.grid);
         this.updateGridDisplay();
     }
 
@@ -327,9 +323,9 @@ class ContributionCalendar {
             const gridPosition = this.findGridPositionForDate(contrib.date);
             if (gridPosition) {
                 this.grid[gridPosition.row][gridPosition.col] = contrib.count;
-                console.log(`✅ Added manual contribution: ${contrib.date} = ${contrib.count} contributions at [${gridPosition.row}][${gridPosition.col}]`);
+                // console.log(`✅ Added manual contribution: ${contrib.date} = ${contrib.count} contributions at [${gridPosition.row}][${gridPosition.col}]`);
             } else {
-                console.log(`❌ Could not find grid position for date: ${contrib.date}`);
+                // console.log(`❌ Could not find grid position for date: ${contrib.date}`);
             }
         });
     }
@@ -692,8 +688,10 @@ class ContributionCalendar {
         const GITHUB_TOKEN = config.GITHUB_TOKEN;
         
         if (!GITHUB_TOKEN || GITHUB_TOKEN === 'YOUR_GITHUB_TOKEN_HERE') {
-            console.log('GitHub token not configured. Using random data for demo.');
-            return;
+            // Fallback to demo data when no token is available
+            this.grid = this.createRandomGrid();
+            this.updateGridDisplay();
+            return true; // used fallback
         }
 
         const query = `
@@ -730,9 +728,10 @@ class ContributionCalendar {
             const data = await response.json();
             
             if (data.errors) {
-                console.error('GitHub API errors:', data.errors);
-                console.log('Using random data for demo.');
-                return;
+                // API error → fallback to demo data
+                this.grid = this.createRandomGrid();
+                this.updateGridDisplay();
+                return true; // used fallback
             }
             
             if (data.data?.user?.contributionsCollection?.contributionCalendar?.weeks) {
@@ -762,11 +761,11 @@ class ContributionCalendar {
                     week.contributionDays.forEach(day => {
                         dateContributionMap.set(day.date, day.contributionCount);
                         if (day.contributionCount > 0) {
-                            console.log(`📅 ${day.date}: ${day.contributionCount} contributions`);
+                            // console.log(`📅 ${day.date}: ${day.contributionCount} contributions`);
                         }
                         // Debug logging for March dates
                         if (day.date.includes('2025-03-10') || day.date.includes('2025-03-14')) {
-                            console.log(`🔍 GitHub data: ${day.date}: ${day.contributionCount} contributions`);
+                            // console.log(`🔍 GitHub data: ${day.date}: ${day.contributionCount} contributions`);
                         }
                     });
                 });
@@ -782,7 +781,7 @@ class ContributionCalendar {
                         
                         // Debug logging for March dates
                         if (dateStr.includes('2025-03-10') || dateStr.includes('2025-03-14')) {
-                            console.log(`🔍 Custom range mapping [${row}][${col}] = ${dateStr}: ${contributionCount} contributions`);
+                            // console.log(`🔍 Custom range mapping [${row}][${col}] = ${dateStr}: ${contributionCount} contributions`);
                         }
                     }
                 }
@@ -798,36 +797,38 @@ class ContributionCalendar {
                 
                 // Enhanced logging
                 const totalContributions = grid.flat().reduce((sum, val) => sum + val, 0);
-                console.log(`✅ Loaded GitHub contributions for ${this.username}`);
-                console.log(`📊 Total contributions displayed: ${totalContributions}`);
+                // console.log(`✅ Loaded GitHub contributions for ${this.username}`);
+                // console.log(`📊 Total contributions displayed: ${totalContributions}`);
                 
                 // Show the actual date range being displayed
                 const firstDisplayedDate = this.calculateDateFromGridPosition(0, 0);
                 const lastDisplayedDate = this.calculateDateFromGridPosition(6, this.COLS - 1);
-                console.log(`📅 Calendar displays: ${firstDisplayedDate.toISOString().split('T')[0]} to ${lastDisplayedDate.toISOString().split('T')[0]}`);
+                // console.log(`📅 Calendar displays: ${firstDisplayedDate.toISOString().split('T')[0]} to ${lastDisplayedDate.toISOString().split('T')[0]}`);
                 
                 // Show recent contributions for debugging
                 const recentDays = weeks.slice(-4).flatMap(w => w.contributionDays).slice(-14);
-                console.log('📅 Recent 14 days:', recentDays.map(d => `${d.date}: ${d.contributionCount}`));
+                // console.log('📅 Recent 14 days:', recentDays.map(d => `${d.date}: ${d.contributionCount}`));
             }
         } catch (error) {
-            console.error('Error fetching GitHub data:', error);
-            console.log('Using random data for demo.');
+            // Network error → fallback to demo data
+            this.grid = this.createRandomGrid();
+            this.updateGridDisplay();
+            return true; // used fallback
         }
     }
 }
 
 // Auto-initialize if container exists and config is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🚀 DOM Content Loaded - Initializing calendar...');
+    // console.log('🚀 DOM Content Loaded - Initializing calendar...');
     const defaultContainer = document.querySelector('#contribution-calendar');
-    console.log('📦 Container found:', defaultContainer);
-    console.log('⚙️ Config loaded:', window.ContributionCalendarConfig);
+    // console.log('📦 Container found:', defaultContainer);
+    // console.log('⚙️ Config loaded:', window.ContributionCalendarConfig);
     
     if (defaultContainer && window.ContributionCalendarConfig) {
-        console.log('✅ Creating calendar instance...');
+        // console.log('✅ Creating calendar instance...');
         window.contributionCalendar = new ContributionCalendar();
-        console.log('🎉 Calendar created:', window.contributionCalendar);
+        // console.log('🎉 Calendar created:', window.contributionCalendar);
     } else {
         console.error('❌ Missing container or config:', {
             container: !!defaultContainer,
